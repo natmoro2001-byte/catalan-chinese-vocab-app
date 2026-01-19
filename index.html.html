@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>加泰罗尼亚语 B2 学习平台 | Plataforma d'Aprenentatge Català B2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .stats {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .mode-btn {
+            flex: 1;
+            min-width: 150px;
+            padding: 15px 25px;
+            background: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            color: #667eea;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .mode-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .mode-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .category-selector {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .category-btn {
+            padding: 12px;
+            background: #f0f0f0;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9em;
+        }
+
+        .category-btn:hover {
+            background: #e8e8ff;
+            border-color: #667eea;
+        }
+
+        .category-btn.selected {
+            background: #667eea;
+            color: white;
+        }
+
+        .content-area {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            min-height: 450px;
+        }
+
+        /* Flashcard Styles */
+        .card {
+            width: 100%;
+            max-width: 700px;
+            min-height: 300px;
+            perspective: 1000px;
+            cursor: pointer;
+            margin: 20px auto;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+
+        .card.flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            min-height: 300px;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .card-back {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .word-catalan {
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .word-chinese {
+            font-size: 2.5em;
+            margin-bottom: 15px;
+        }
+
+        .pinyin {
+            font-size: 1.3em;
+            opacity: 0.85;
+            font-style: italic;
+        }
+
+        .example {
+            font-size: 1.1em;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.3);
+            line-height: 1.6;
+        }
+
+        /* Graded Reader Styles */
+        .reader-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .reader-title {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .reader-level {
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 1.1em;
+        }
+
+        .reader-text {
+            font-size: 1.2em;
+            line-height: 2;
+            color: #333;
+            text-align: justify;
+            margin-bottom: 30px;
+        }
+
+        .reader-text .highlight {
+            background: linear-gradient(135deg, #fff9c4 0%, #ffeb3b 100%);
+            padding: 2px 5px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .reader-text .highlight:hover {
+            background: #ffeb3b;
+            transform: scale(1.05);
+        }
+
+        .tooltip {
+            position: fixed;
+            background: #333;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9em;
+            z-index: 1000;
+            display: none;
+            max-width: 300px;
+        }
+
+        .translation-box {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        /* Game Styles */
+        .game-container {
+            text-align: center;
+        }
+
+        .game-score {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .game-question {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            font-size: 2em;
+            margin-bottom: 30px;
+        }
+
+        .game-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .game-option {
+            padding: 20px;
+            background: #f0f0f0;
+            border: 3px solid #e0e0e0;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1.3em;
+            transition: all 0.3s;
+        }
+
+        .game-option:hover {
+            background: #e8e8ff;
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .game-option.correct {
+            background: #51cf66;
+            color: white;
+            border-color: #51cf66;
+        }
+
+        .game-option.wrong {
+            background: #ff6b6b;
+            color: white;
+            border-color: #ff6b6b;
+        }
+
+        .game-timer {
+            font-size: 1.5em;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .game-streak {
+            background: #ffd43b;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .control-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .btn-prev {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        .btn-next {
+            background: #4ecdc4;
+            color: white;
+        }
+
+        .btn-shuffle {
+            background: #95e1d3;
+            color: #333;
+        }
+
+        .btn-know {
+            background: #51cf66;
+            color: white;
+        }
+
+        .btn-learning {
+            background: #ffd43b;
+            color: #333;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s;
+        }
+
+        .card-counter {
+            text-align: center;
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .difficulty-selector {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .difficulty-btn {
+            padding: 10px 20px;
+            margin: 0 5px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .difficulty-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .word-catalan {
+                font-size: 2.2em;
+            }
+            .word-chinese {
+                font-size: 2em;
+            }
+            .game-options {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 加泰罗尼亚语 B2 学习平台</h1>
+            <p>Plataforma completa d'aprenentatge de català B2</p>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="totalWords">300+</div>
+                <div class="stat-label">总词汇 Total</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="knownWords">0</div>
+                <div class="stat-label">已掌握 Conegut</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="gameScore">0</div>
+                <div class="stat-label">游戏分数 Punts</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="streakCount">0</div>
+                <div class="stat-label">连胜 Ratxa</div>
+            </div>
+        </div>
+
+        <div class="mode-selector">
+            <button class="mode-btn active" onclick="setMode('flashcard')">
+                🎴 闪卡 Flashcards
+            </button>
+            <button class="mode-btn" onclick="setMode('reader')">
+                📖 阅读 Lectura
+            </button>
+            <button class="mode-btn" onclick="setMode('game')">
+                🎮 游戏 Joc
+            </button>
+        </div>
+
+        <div id="categorySection" class="category-selector">
+            <h3>📂 选择类别 Selecciona categoria</h3>
+            <div class="category-grid">
+                <button class="category-btn selected" onclick="selectCategory('all')">
+                    全部 Tot
+                </button>
+                <button class="category-btn" onclick="selectCategory('business')">
+                    商务 Negocis
+                </button>
+                <button class="category-btn" onclick="selectCategory('academic')">
+                    学术 Acadèmic
+                </button>
+                <button class="category-btn" onclick="selectCategory('daily')">
+                    日常 Quotidià
+                </button>
+                <button class="category-btn" onclick="selectCategory('expressions')">
+                    习语 Expressions
+                </button>
+                <button class="category-btn" onclick="selectCategory('connectors')">
+                    连接词 Connectors
+                </button>
+                <button class="category-btn" onclick="selectCategory('verbs')">
+                    动词 Verbs
+                </button>
+            </div>
+        </div>
+
+        <div id="contentArea" class="content-area">
+            <!-- Content will be loaded here -->
+        </div>
+    </div>
+
+    <div class="tooltip" id="tooltip"></div>
+
+    <script>
+        const vocabulary = {
+            business: [
+                {cat: "Emprenedor", cn: "企业家", pinyin: "qǐyèjiā", exCat: "L'emprenedor va crear una empresa innovadora.", exCn: "企业家创立了一家创新公司。"},
+                {cat: "Rendibilitat", cn: "盈利能力", pinyin: "yínglì nénglì", exCat: "La rendibilitat de l'empresa ha millorat.", exCn: "公司的盈利能力提高了。"},
+                {cat: "Inversió", cn: "投资", pinyin: "tóuzī", exCat: "La inversió en tecnologia és prioritària.", exCn: "技术投资是优先事项。"},
+                {cat: "Pressupost", cn: "预算", pinyin: "yùsuàn", exCat: "Hem d'ajustar el pressupost anual.", exCn: "我们需要调整年度预算。"},
+                {cat: "Mercat", cn: "市场", pinyin: "shìchǎng", exCat: "El mercat europeu és molt competitiu.", exCn: "欧洲市场竞争激烈。"},
+                {cat: "Benefici", cn: "利润", pinyin: "lìrùn", exCat: "Els beneficis han augmentat un 15%.", exCn: "利润增长了15%。"},
+                {cat: "Estratègia", cn: "战略", pinyin: "zhànlüè", exCat: "Necessitem una nova estratègia comercial.", exCn: "我们需要新的商业战略。"},
+                {cat: "Competència", cn: "竞争", pinyin: "jìngzhēng", exCat: "La competència al sector és intensa.", exCn: "该行业的竞争很激烈。"},
+                {cat: "Accionista", cn: "股东", pinyin: "gǔdōng", exCat: "Els accionistes van aprovar la proposta.", exCn: "股东们批准了提案。"},
+                {cat: "Sostenibilitat", cn: "可持续性", pinyin: "kě chíxù xìng", exCat: "La sostenibilitat és clau per al futur.", exCn: "可持续性是未来的关键。"},
+                {cat: "Fusió", cn: "合并", pinyin: "hébìng", exCat: "La fusió de les dues empreses es completarà l'any vinent.", exCn: "两家公司的合并将在明年完成。"},
+                {cat: "Adquisició", cn: "收购", pinyin: "shōugòu", exCat: "L'adquisició ha estat aprovada pel consell.", exCn: "收购已获董事会批准。"},
+                {cat: "Audit", cn: "审计", pinyin: "shěnjì", exCat: "L'audit extern va detectar irregularitats.", exCn: "外部审计发现了违规行为。"},
+                {cat: "Xifra de negoci", cn: "营业额", pinyin: "yíngyè'é", exCat: "La xifra de negoci ha arribat als 5 milions.", exCn: "营业额达到了500万。"},
+                {cat: "Fluxos de caixa", cn: "现金流", pinyin: "xiànjīn liú", exCat: "Els fluxos de caixa són positius.", exCn: "现金流是正的。"},
+                {cat: "Comptabilitat", cn: "会计", pinyin: "kuàijì", exCat: "El departament de comptabilitat fa els balanços.", exCn: "会计部门做资产负债表。"},
+                {cat: "Balanç", cn: "资产负债表", pinyin: "zīchǎn fùzhài biǎo", exCat: "El balanç anual està aprovat.", exCn: "年度资产负债表已获批准。"},
+                {cat: "Pèrdues", cn: "亏损", pinyin: "kuīsǔn", exCat: "L'empresa va tenir pèrdues aquest trimestre.", exCn: "公司本季度亏损。"},
+                {cat: "Soci", cn: "合伙人", pinyin: "héhuǒrén", exCat: "Els socis van signar el contracte.", exCn: "合伙人签署了合同。"},
+                {cat: "Gerent", cn: "经理", pinyin: "jīnglǐ", exCat: "La gerent va presentar els resultats.", exCn: "经理介绍了结果。"},
+                {cat: "Consell d'administració", cn: "董事会", pinyin: "dǒngshìhuì", exCat: "El consell es reuneix mensualment.", exCn: "董事会每月开会。"},
+                {cat: "Dividend", cn: "股息", pinyin: "gǔxī", exCat: "Els dividends es paguen anualment.", exCn: "股息每年支付。"},
+                {cat: "Acció", cn: "股票", pinyin: "gǔpiào", exCat: "Les accions han pujat un 20%.", exCn: "股票上涨了20%。"},
+                {cat: "Borsa", cn: "股市", pinyin: "gǔshì", exCat: "La borsa està molt volàtil.", exCn: "股市波动很大。"},
+                {cat: "Cotització", cn: "股价", pinyin: "gǔjià", exCat: "La cotització ha baixat avui.", exCn: "股价今天下跌了。"},
+                {cat: "Finançament", cn: "融资", pinyin: "róngzī", exCat: "Busquem finançament extern.", exCn: "我们寻求外部融资。"},
+                {cat: "Préstec", cn: "贷款", pinyin: "dàikuǎn", exCat: "Hem demanat un préstec bancari.", exCn: "我们申请了银行贷款。"},
+                {cat: "Interès", cn: "利息", pinyin: "lìxī", exCat: "Els interessos són del 3% anual.", exCn: "利息是年利率3%。"},
+                {cat: "Deute", cn: "债务", pinyin: "zhàiwù", exCat: "Hem reduït el deute significativament.", exCn: "我们大幅减少了债务。"},
+                {cat: "Creditor", cn: "债权人", pinyin: "zhàiquánrén", exCat: "Els creditors reclamen el pagament.", exCn: "债权人要求付款。"},
+                {cat: "Factura", cn: "发票", pinyin: "fāpiào", exCat: "Envieu la factura al departament.", exCn: "把发票发送给部门。"},
+                {cat: "Proveïdor", cn: "供应商", pinyin: "gōngyìngshāng", exCat: "Els proveïdors entreguen a temps.", exCn: "供应商按时交货。"},
+                {cat: "Client", cn: "客户", pinyin: "kèhù", exCat: "La satisfacció del client és prioritària.", exCn: "客户满意度是首要任务。"},
+                {cat: "Contracte", cn: "合同", pinyin: "hétong", exCat: "El contracte és vàlid per dos anys.", exCn: "合同有效期为两年。"},
+                {cat: "Clàusula", cn: "条款", pinyin: "tiáokuǎn", exCat: "Aquesta clàusula és molt important.", exCn: "这个条款非常重要。"},
+                {cat: "Negociació", cn: "谈判", pinyin: "tánpàn", exCat: "Les negociacions van ser exitoses.", exCn: "谈判很成功。"},
+                {cat: "Acord", cn: "协议", pinyin: "xiéyì", exCat: "Hem arribat a un acord mutu.", exCn: "我们达成了共识。"},
+                {cat: "Proposta", cn: "提案", pinyin: "tí'àn", exCat: "La proposta va ser acceptada.", exCn: "提案被接受了。"},
+                {cat: "Oferta", cn: "报价", pinyin: "bàojià", exCat: "L'oferta és competitiva.", exCn: "报价很有竞争力。"},
+                {cat: "Demanda", cn: "需求", pinyin: "xūqiú", exCat: "La demanda ha augmentat molt.", exCn: "需求大幅增长。"},
+                {cat: "Oferta i demanda", cn: "供求", pinyin: "gōngqiú", exCat: "La llei de l'oferta i la demanda regula els preus.", exCn: "供求规律调节价格。"},
+                {cat: "Preu", cn: "价格", pinyin: "jiàgé", exCat: "Els preus s'han estabilitzat.", exCn: "价格稳定了。"},
+                {cat: "Descompte", cn: "折扣", pinyin: "zhékòu", exCat: "Oferim un 20% de descompte.", exCn: "我们提供20%的折扣。"},
+                {cat: "Import", cn: "金额", pinyin: "jīn'é", exCat: "L'import total és de 5.000 euros.", exCn: "总金额为5000欧元。"},
+                {cat: "Pagament", cn: "付款", pinyin: "fùkuǎn", exCat: "El pagament es fa al final de mes.", exCn: "月底付款。"},
+                {cat: "Ingrés", cn: "收入", pinyin: "shōurù", exCat: "Els ingressos han crescut un 30%.", exCn: "收入增长了30%。"},
+                {cat: "Despesa", cn: "支出", pinyin: "zhīchū", exCat: "Les despeses s'han reduït.", exCn: "支出减少了。"},
+                {cat: "Cost", cn: "成本", pinyin: "chéngběn", exCat: "Els costos de producció són elevats.", exCn: "生产成本很高。"},
+                {cat: "Marge", cn: "利润率", pinyin: "lìrùnlǜ", exCat: "El marge de benefici és del 15%.", exCn: "利润率是15%。"},
+                {cat: "Productivitat", cn: "生产率", pinyin: "shēngchǎnlǜ", exCat: "La productivitat ha millorat.", exCn: "生产率提高了。"},
+                {cat: "Eficiència", cn: "效率", pinyin: "xiàolǜ", exCat: "L'eficiència operativa és clau.", exCn: "运营效率是关键。"},
+                {cat: "Innovació", cn: "创新", pinyin: "chuàngxīn", exCat: "La innovació impulsa el creixement.", exCn: "创新推动增长。"},
+                {cat: "Qualitat", cn: "质量", pinyin: "zhìliàng", exCat: "La qualitat del producte és excel·lent.", exCn: "产品质量优秀。"},
+                {cat: "Marca", cn: "品牌", pinyin: "pǐnpái", exCat: "La marca té molt prestigi.", exCn: "品牌很有声望。"},
+                {cat: "Patent", cn: "专利", pinyin: "zhuānlì", exCat: "Hem registrat la patent.", exCn: "我们注册了专利。"},
+                {cat: "Llicència", cn: "许可证", pinyin: "xǔkězhèng", exCat: "Necessitem una llicència comercial.", exCn: "我们需要商业许可证。"},
+                {cat: "Franquícia", cn: "特许经营", pinyin: "tèxǔ jīngyíng", exCat: "Volem obrir franquícies.", exCn: "我们想开设特许经营店。"},
+                {cat: "Exportació", cn: "出口", pinyin: "chūkǒu", exCat: "Les exportacions han crescut.", exCn: "出口增长了。"},
+                {cat: "Importació", cn: "进口", pinyin: "jìnkǒu", exCat: "Importem matèries primeres.", exCn: "我们进口原材料。"},
+                {cat: "Logística", cn: "物流", pinyin: "wùliú", exCat: "La logística és eficient.", exCn: "物流很高效。"},
+                {cat: "Magatzem", cn: "仓库", pinyin: "cāngkù", exCat: "El magatzem està ple.", exCn: "仓库满了。"},
+                {cat: "Inventari", cn: "库存", pinyin: "kùcún", exCat: "L'inventari està actualitzat.", exCn: "库存已更新。"},
+                {cat: "Distribució", cn: "分销", pinyin: "fēnxiāo", exCat: "La distribució és global.", exCn: "分销是全球性的。"},
+                {cat: "Venda", cn: "销售", pinyin: "xiāoshòu", exCat: "Les vendes han superat expectatives.", exCn: "销售超出预期。"},
+                {cat: "Màrqueting", cn: "营销", pinyin: "yíngxiāo", exCat: "La campanya de màrqueting va ser exitosa.", exCn: "营销活动很成功。"},
+                {cat: "Publicitat", cn: "广告", pinyin: "guǎnggào", exCat: "La publicitat arriba a moltes persones.", exCn: "广告触达很多人。"},
+                {cat: "Promoció", cn: "促销", pinyin: "cùxiāo", exCat: "La promoció dura tot el mes.", exCn: "促销活动持续整月。"}
+            ],
+            academic: [
+                {cat: "Investigació", cn: "研究", pinyin: "yánjiū", exCat: "La investigació científica és fonamental.", exCn: "科学研究至关重要。"},
+                {cat: "Anàlisi", cn: "分析", pinyin: "fēnxī", exCat: "L'anàlisi dels resultats és exhaustiva.", exCn: "结果分析很详尽。"},
+                {cat: "Hipòtesi", cn: "假设", pinyin: "jiǎshè", exCat: "La hipòtesi inicial ha estat confirmada.", exCn: "初始假设已被证实。"},
+                {cat: "Metodologia", cn: "方法论", pinyin: "fāngfǎlùn", exCat: "La metodologia utilitzada és rigorosa.", exCn: "使用的方法论很严格。"},
+                {cat: "Dades", cn: "数据", pinyin: "shùjù", exCat: "Les dades recollides són fiables.", exCn: "收集的数据可靠。"},
+                {cat: "Conclusió", cn: "结论", pinyin: "jiélùn", exCat: "La conclusió de l'estudi és clara.", exCn: "研究的结论很清晰。"},
+                {cat: "Variable", cn: "变量", pinyin: "biànliàng", exCat: "Hem controlat totes les variables.", exCn: "我们控制了所有变量。"},
+                {cat: "Estadística", cn: "统计", pinyin: "tǒngjì", exCat: "L'anàlisi estadística mostra correlacions.", exCn: "统计分析显示相关性。"},
+                {cat: "Evidència", cn: "证据", pinyin: "zhèngjù", exCat: "L'evidència empírica dóna suport a la teoria.", exCn: "经验证据支持该理论。"},
+                {cat: "Paradigma", cn: "范式", pinyin: "fànshì", exCat: "Un canvi de paradigma és necessari.", exCn: "需要范式转变。"},
+                {cat: "Teoria", cn: "理论", pinyin: "lǐlùn", exCat: "La teoria ha estat àmpliament acceptada.", exCn: "该理论已被广泛接受。"},
+                {cat: "Concepte", cn: "概念", pinyin: "gàiniàn", exCat: "El concepte és complex però rellevant.", exCn: "概念复杂但相关。"},
+                {cat: "Dissertació", cn: "论文", pinyin: "lùnwén", exCat: "La dissertació va ser molt ben valorada.", exCn: "论文评价很高。"},
+                {cat: "Publicació", cn: "出版物", pinyin: "chūbǎnwù", exCat: "La publicació va sortir a la revista Nature.", exCn: "论文发表在《自然》杂志上。"},
+                {cat: "Article", cn: "文章", pinyin: "wénzhāng", exCat: "L'article acadèmic té moltes citacions.", exCn: "学术文章被大量引用。"},
+                {cat: "Citació", cn: "引用", pinyin: "yǐnyòng", exCat: "La citació és correcta.", exCn: "引用是正确的。"},
+                {cat: "Bibliografia", cn: "参考书目", pinyin: "cānkǎo shūmù", exCat: "La bibliografia és extensa.", exCn: "参考书目很广泛。"},
+                {cat: "Referència", cn: "参考文献", pinyin: "cānkǎo wénxiàn", exCat: "Les referències estan actualitzades.", exCn: "参考文献是最新的。"},
+                {cat: "Font", cn: "来源", pinyin: "láiyuán", exCat: "La font és fiable.", exCn: "来源可靠。"},
+                {cat: "Experiment", cn: "实验", pinyin: "shíyàn", exCat: "L'experiment va donar resultats positius.", exCn: "实验给出了积极结果。"},
+                {cat: "Mostra", cn: "样本", pinyin: "yàngběn", exCat: "La mostra és representativa.", exCn: "样本具有代表性。"},
+                {cat: "Població", cn: "总体", pinyin: "zǒngtǐ", exCat: "La població estudiada és gran.", exCn: "研究的总体很大。"},
+                {cat: "Enquesta", cn: "调查", pinyin: "diàochá", exCat: "L'enquesta té 500 participants.", exCn: "调查有500名参与者。"},
+                {cat: "Qüestionari", cn: "问卷", pinyin: "wènjuàn", exCat: "El qüestionari és anònim.", exCn: "问卷是匿名的。"},
+                {cat: "Entrevista", cn: "访谈", pinyin: "fǎngtán", exCat: "Les entrevistes van ser gravades.", exCn: "访谈被录制了。"},
+                {cat: "Observació", cn: "观察", pinyin: "guānchá", exCat: "L'observació és directa.", exCn: "观察是直接的。"},
+                {cat: "Mesura", cn: "测量", pinyin: "cèliáng", exCat: "Les mesures són precises.", exCn: "测量很精确。"},
+                {cat: "Resultat", cn: "结果", pinyin: "jiéguǒ", exCat: "Els resultats són significatius.", exCn: "结果很显著。"},
+                {cat: "Interpretació", cn: "解释", pinyin: "jiěshì", exCat: "La interpretació és coherent.", exCn: "解释是连贯的。"},
+                {cat: "Validesa", cn: "有效性", pinyin: "yǒuxiào xìng", exCat: "La validesa de l'estudi és alta.", exCn: "研究的有效性很高。"},
+                {cat: "Fiabilitat", cn: "可靠性", pinyin: "kěkào xìng", exCat: "La fiabilitat dels instruments és provada.", exCn: "仪器的可靠性已被证明。"},
+                {cat: "Correlació", cn: "相关性", pinyin: "xiāngguān xìng", exCat: "Hi ha una correlació positiva.", exCn: "存在正相关。"},
+                {cat: "Causalitat", cn: "因果关系", pinyin: "yīnguǒ guānxì", exCat: "La causalitat no és clara.", exCn: "因果关系不清楚。"},
+                {cat: "Factor", cn: "因素", pinyin: "yīnsù", exCat: "Diversos factors influeixen.", exCn: "多个因素产生影响。"},
+                {cat: "Influència", cn: "影响", pinyin: "yǐngxiǎng", exCat: "La influència és notable.", exCn: "影响很显著。"},
+                {cat: "Efecte", cn: "效应", pinyin: "xiàoyìng", exCat: "L'efecte és mesurable.", exCn: "效应是可测量的。"},
+                {cat: "Significança", cn: "显著性", pinyin: "xiǎnzhù xìng", exCat: "La significança estadística és del 95%.", exCn: "统计显著性为95%。"},
+                {cat: "Tendència", cn: "趋势", pinyin: "qūshì", exCat: "La tendència és a l'alça.", exCn: "趋势是上升的。"},
+                {cat: "Patró", cn: "模式", pinyin: "móshì", exCat: "S'observa un patró clar.", exCn: "观察到清晰的模式。"},
+                {cat: "Fenomen", cn: "现象", pinyin: "xiànxiàng", exCat: "El fenomen és complex.", exCn: "现象很复杂。"},
+                {cat: "Procés", cn: "过程", pinyin: "guòchéng", exCat: "El procés és llarg.", exCn: "过程很长。"},
+                {cat: "Desenvolupament", cn: "发展", pinyin: "fāzhǎn", exCat: "El desenvolupament és gradual.", exCn: "发展是渐进的。"},
+                {cat: "Evolució", cn: "演变", pinyin: "yǎnbiàn", exCat: "L'evolució és constant.", exCn: "演变是持续的。"},
+                {cat: "Transformació", cn: "转变", pinyin: "zhuǎnbiàn", exCat: "La transformació és radical.", exCn: "转变很彻底。"},
+                {cat: "Context", cn: "背景", pinyin: "bèijǐng", exCat: "El context és important.", exCn: "背景很重要。"},
+                {cat: "Marc teòric", cn: "理论框架", pinyin: "lǐlùn kuàngjià", exCat: "El marc teòric és sòlid.", exCn: "理论框架很扎实。"},
+                {cat: "Àmbit", cn: "领域", pinyin: "lǐngyù", exCat: "L'àmbit d'estudi és ampli.", exCn: "研究领域很广。"},
+                {cat: "Disciplina", cn: "学科", pinyin: "xuékē", exCat: "És una disciplina interdisciplinària.", exCn: "这是一门跨学科学科。"},
+                {cat: "Camp", cn: "字段", pinyin: "zìduàn", exCat: "És un camp emergent.", exCn: "这是一个新兴领域。"}
+            ],
+            daily: [
+                {cat: "Desplaçar-se", cn: "移动，出行", pinyin: "yídòng, chūxíng", exCat: "Em desplaço en transport públic.", exCn: "我乘公共交通出行。"},
+                {cat: "Plantejar", cn: "提出，提议", pinyin: "tíchū, tíyì", exCat: "Vull plantejar una qüestió important.", exCn: "我想提出一个重要问题。"},
+                {cat: "Assolir", cn: "达成，实现", pinyin: "dáchéng, shíxiàn", exCat: "Hem assolit els nostres objectius.", exCn: "我们实现了目标。"},
+                {cat: "Aprofundir", cn: "深入研究", pinyin: "shēnrù yánjiū", exCat: "Vull aprofundir en aquest tema.", exCn: "我想深入研究这个课题。"},
+                {cat: "Comprometre's", cn: "承诺，投入", pinyin: "chéngnuò, tóurù", exCat: "Ens comprometem amb la qualitat.", exCn: "我们致力于质量。"},
+                {cat: "Destacar", cn: "突出，强调", pinyin: "tūchū, qiángdiào", exCat: "Cal destacar la importància d'aquesta decisió.", exCn: "必须强调这个决定的重要性。"},
+                {cat: "Planificar", cn: "规划", pinyin: "guīhuà", exCat: "Hem de planificar el viatge amb antelació.", exCn: "我们需要提前规划旅行。"},
+                {cat: "Reflexionar", cn: "反思", pinyin: "fǎnsī", exCat: "És bo reflexionar sobre les nostres accions.", exCn: "反思我们的行为是有益的。"},
+                {cat: "Valorar", cn: "评估，珍视", pinyin: "pínggū, zhēnshì", exCat: "Valoro molt la teva opinió.", exCn: "我非常重视你的意见。"},
+                {cat: "Afrontar", cn: "面对", pinyin: "miànduì", exCat: "Hem d'afrontar els reptes.", exCn: "我们必须面对挑战。"},
+                {cat: "Superar", cn: "克服", pinyin: "kèfú", exCat: "Hem superat les dificultats.", exCn: "我们克服了困难。"},
+                {cat: "Aconseguir", cn: "获得", pinyin: "huòdé", exCat: "He aconseguit el que volia.", exCn: "我获得了我想要的。"},
+                {cat: "Mantenir", cn: "保持", pinyin: "bǎochí", exCat: "Cal mantenir la calma.", exCn: "必须保持冷静。"},
+                {cat: "Conservar", cn: "保存", pinyin: "bǎocún", exCat: "Volem conservar les tradicions.", exCn: "我们想保存传统。"},
+                {cat: "Millorar", cn: "改善", pinyin: "gǎishàn", exCat: "La situació ha millorat.", exCn: "情况改善了。"},
+                {cat: "Empitjorar", cn: "恶化", pinyin: "èhuà", exCat: "La situació ha empitjorat.", exCn: "情况恶化了。"},
+                {cat: "Augmentar", cn: "增加", pinyin: "zēngjiā", exCat: "Els preus han augmentat.", exCn: "价格上涨了。"},
+                {cat: "Reduir", cn: "减少", pinyin: "jiǎnshǎo", exCat: "Hem reduït els costos.", exCn: "我们减少了成本。"},
+                {cat: "Desenvolupar", cn: "发展", pinyin: "fāzhǎn", exCat: "Volem desenvolupar noves habilitats.", exCn: "我们想发展新技能。"},
+                {cat: "Fomentar", cn: "促进", pinyin: "cùjìn", exCat: "Fomentem la participació.", exCn: "我们促进参与。"},
+                {cat: "Promoure", cn: "推广", pinyin: "tuīguǎng", exCat: "Promovem la sostenibilitat.", exCn: "我们推广可持续发展。"},
+                {cat: "Impulsar", cn: "推动", pinyin: "tuīdòng", exCat: "Impulsem el canvi.", exCn: "我们推动变革。"},
+                {cat: "Fomentar", cn: "培养", pinyin: "péiyǎng", exCat: "Fomentem els talents joves.", exCn: "我们培养年轻人才。"},
+                {cat: "Contribuir", cn: "贡献", pinyin: "gòngxiàn", exCat: "Vull contribuir a la societat.", exCn: "我想为社会做贡献。"},
+                {cat: "Participar", cn: "参与", pinyin: "cānyù", exCat: "Participo en moltes activitats.", exCn: "我参与很多活动。"},
+                {cat: "Col·laborar", cn: "合作", pinyin: "hézuò", exCat: "Col·laborem en diversos projectes.", exCn: "我们在多个项目上合作。"},
+                {cat: "Compartir", cn: "分享", pinyin: "fēnxiǎng", exCat: "Compartim coneixements.", exCn: "我们分享知识。"},
+                {cat: "Intercanviar", cn: "交换", pinyin: "jiāohuàn", exCat: "Intercanviem opinions.", exCn: "我们交换意见。"},
+                {cat: "Comunicar", cn: "沟通", pinyin: "gōutōng", exCat: "És important comunicar-se bé.", exCn: "良好的沟通很重要。"},
+                {cat: "Expressar", cn: "表达", pinyin: "biǎodá", exCat: "M'agrada expressar les meves idees.", exCn: "我喜欢表达我的想法。"},
+                {cat: "Manifestar", cn: "表明", pinyin: "biǎomíng", exCat: "Vull manifestar la meva opinió.", exCn: "我想表明我的观点。"},
+                {cat: "Opinar", cn: "发表意见", pinyin: "fābiǎo yìjiàn", exCat: "Tots poden opinar lliurement.", exCn: "每个人都可以自由发表意见。"},
+                {cat: "Considerar", cn: "考虑", pinyin: "kǎolǜ", exCat: "Considerem totes les opcions.", exCn: "我们考虑所有选项。"},
+                {cat: "Debatre", cn: "辩论", pinyin: "biànlùn", exCat: "Debatem sobre temes actuals.", exCn: "我们就时事辩论。"},
+                {cat: "Argumentar", cn: "论证", pinyin: "lùnzhèng", exCat: "Has d'argumentar millor.", exCn: "你需要更好地论证。"},
+                {cat: "Justificar", cn: "证明合理", pinyin: "zhèngmíng hélǐ", exCat: "Cal justificar aquesta decisió.", exCn: "需要证明这个决定的合理性。"},
+                {cat: "Raonar", cn: "推理", pinyin: "tuīlǐ", exCat: "El teu raonament és correcte.", exCn: "你的推理是正确的。"},
+                {cat: "Persuadir", cn: "说服", pinyin: "shuōfú", exCat: "Va aconseguir persuadir-me.", exCn: "他成功说服了我。"},
+                {cat: "Convèncer", cn: "说服", pinyin: "shuōfú", exCat: "No em vas convèncer.", exCn: "你没说服我。"},
+                {cat: "Influir", cn: "影响", pinyin: "yǐngxiǎng", exCat: "Influeixen molt en mi.", exCn: "他们对我影响很大。"},
+                {cat: "Inspirar", cn: "激励", pinyin: "jīlì", exCat: "M'inspiren molt.", exCn: "他们很激励我。"},
+                {cat: "Motivar", cn: "激发", pinyin: "jīfā", exCat: "Això em motiva a continuar.", exCn: "这激发我继续前进。"},
+                {cat: "Animar", cn: "鼓励", pinyin: "gǔlì", exCat: "M'animen molt.", exCn: "他们很鼓励我。"},
+                {cat: "Recolzar", cn: "支持", pinyin: "zhīchí", exCat: "Et recolzo totalment.", exCn: "我完全支持你。"},
+                {cat: "Ajudar", cn: "帮助", pinyin: "bāngzhù", exCat: "M'ajuden molt.", exCn: "他们帮我很多。"},
+                {cat: "Assistir", cn: "协助", pinyin: "xiézhù", exCat: "Assisteixo a reunions.", exCn: "我参加会议。"},
+                {cat: "Atendre", cn: "接待", pinyin: "jiēdài", exCat: "Atenc els clients.", exCn: "我接待客户。"},
+                {cat: "Cuidar", cn: "照顾", pinyin: "zhàogù", exCat: "Cuido la meva salut.", exCn: "我照顾我的健康。"},
+                {cat: "Protegir", cn: "保护", pinyin: "bǎohù", exCat: "Protegim el medi ambient.", exCn: "我们保护环境。"}
+            ],
+            expressions: [
+                {cat: "Posar-se les piles", cn: "加把劲", pinyin: "jiā bǎ jìn", exCat: "Hauràs de posar-te les piles si vols aprovar.", exCn: "如果你想及格就得加把劲。"},
+                {cat: "Tirar endavant", cn: "继续前进", pinyin: "jìxù qiánjìn", exCat: "Malgrat les dificultats, tirarem endavant.", exCn: "尽管困难重重，我们会继续前进。"},
+                {cat: "Fer el salt", cn: "迈出这一步", pinyin: "màichū zhè yībù", exCat: "Finalment va fer el salt i va canviar de feina.", exCn: "他最终迈出了这一步，换了工作。"},
+                {cat: "Tenir present", cn: "牢记", pinyin: "láojì", exCat: "Cal tenir present aquest detall.", exCn: "必须牢记这个细节。"},
+                {cat: "Dur a terme", cn: "执行", pinyin: "zhíxíng", exCat: "Durem a terme el projecte amb èxit.", exCn: "我们成功执行了项目。"},
+                {cat: "Tenir en compte", cn: "考虑到", pinyin: "kǎolǜ dào", exCat: "Hem de tenir en compte tots els factors.", exCn: "我们必须考虑所有因素。"},
+                {cat: "Fer cas", cn: "听从", pinyin: "tīngcóng", exCat: "Sempre faig cas dels consells dels meus pares.", exCn: "我总是听从父母的建议。"},
+                {cat: "Passar per alt", cn: "忽略", pinyin: "hūlüè", exCat: "No podem passar per alt aquest problema.", exCn: "我们不能忽略这个问题。"},
+                {cat: "Fer fora", cn: "解雇", pinyin: "jiěgù", exCat: "Van fer fora el director.", exCn: "他们解雇了董事。"},
+                {cat: "Treure profit", cn: "获利", pinyin: "huòlì", exCat: "Van treure molt profit del negoci.", exCn: "他们从生意中获利很多。"},
+                {cat: "Anar bé", cn: "进展顺利", pinyin: "jìnzhǎn shùnlì", exCat: "Les coses van bé.", exCn: "事情进展顺利。"},
+                {cat: "Anar malament", cn: "进展不顺", pinyin: "jìnzhǎn bù shùn", exCat: "Les coses van malament.", exCn: "事情进展不顺。"},
+                {cat: "Fer front", cn: "应对", pinyin: "yìngduì", exCat: "Fem front a la crisi.", exCn: "我们应对危机。"},
+                {cat: "Fer cap", cn: "理解", pinyin: "lǐjiě", exCat: "No hi faig cap.", exCn: "我不理解。"},
+                {cat: "Adonar-se", cn: "意识到", pinyin: "yìshí dào", exCat: "M'adono del problema.", exCn: "我意识到问题。"},
+                {cat: "Fer-se càrrec", cn: "负责", pinyin: "fùzé", exCat: "Em faig càrrec de la situació.", exCn: "我负责这个情况。"},
+                {cat: "Prendre decisions", cn: "做决定", pinyin: "zuò juédìng", exCat: "Cal prendre decisions difícils.", exCn: "需要做艰难决定。"},
+                {cat: "Tenir èxit", cn: "成功", pinyin: "chénggōng", exCat: "L'empresa té molt èxit.", exCn: "公司很成功。"},
+                {cat: "Tenir sort", cn: "运气好", pinyin: "yùnqi hǎo", exCat: "Vas tenir sort.", exCn: "你运气好。"},
+                {cat: "Fer malbé", cn: "弄坏", pinyin: "nòng huài", exCat: "He fet malbé l'ordinador.", exCn: "我弄坏了电脑。"},
+                {cat: "Posar remei", cn: "解决", pinyin: "jiějué", exCat: "Cal posar remei a aquesta situació.", exCn: "需要解决这个情况。"},
+                {cat: "Treure l'entrellat", cn: "搞清楚", pinyin: "gǎo qīngchu", exCat: "Vull treure l'entrellat d'aquest misteri.", exCn: "我想搞清楚这个谜。"},
+                {cat: "Donar la raó", cn: "同意", pinyin: "tóngyì", exCat: "Li dono la raó.", exCn: "我同意他。"},
+                {cat: "Tenir raó", cn: "有道理", pinyin: "yǒu dàolǐ", exCat: "Tens raó.", exCn: "你有道理。"},
+                {cat: "Treure pit", cn: "骄傲", pinyin: "jiāo'ào", exCat: "Treu pit dels seus èxits.", exCn: "他为自己的成功感到骄傲。"},
+                {cat: "Perdre els estreps", cn: "失控", pinyin: "shīkòng", exCat: "Va perdre els estreps.", exCn: "他失控了。"},
+                {cat: "Fer la vista grossa", cn: "视而不见", pinyin: "shì'érbùjiàn", exCat: "Van fer la vista grossa.", exCn: "他们视而不见。"},
+                {cat: "Estar per", cn: "愿意", pinyin: "yuànyì", exCat: "Estic per anar-hi.", exCn: "我愿意去。"},
+                {cat: "Estar a punt de", cn: "即将", pinyin: "jíjiāng", exCat: "Estem a punt de sortir.", exCn: "我们即将出发。"},
+                {cat: "Tenir ganes", cn: "想要", pinyin: "xiǎng yào", exCat: "Tinc ganes de viatjar.", exCn: "我想要旅行。"}
+            ],
+            connectors: [
+                {cat: "Tanmateix", cn: "然而", pinyin: "rán'ér", exCat: "És difícil, tanmateix, no impossible.", exCn: "这很难，然而并非不可能。"},
+                {cat: "Així doncs", cn: "因此", pinyin: "yīncǐ", exCat: "Així doncs, haurem de canviar el pla.", exCn: "因此，我们需要改变计划。"},
+                {cat: "Pel que fa a", cn: "关于", pinyin: "guānyú", exCat: "Pel que fa al pressupost, hem de ser cautelosos.", exCn: "关于预算，我们需要谨慎。"},
+                {cat: "Malgrat que", cn: "尽管", pinyin: "jǐnguǎn", exCat: "Malgrat que plou, sortirem.", exCn: "尽管下雨，我们还是要出去。"},
+                {cat: "En canvi", cn: "相反地", pinyin: "xiāngfǎn de", exCat: "No vindrà. En canvi, enviarà un representant.", exCn: "他不会来。相反地，他会派代表。"},
+                {cat: "D'altra banda", cn: "另一方面", pinyin: "lìng yī fāngmiàn", exCat: "D'altra banda, també hi ha avantatges.", exCn: "另一方面，也有优势。"},
+                {cat: "A més a més", cn: "此外", pinyin: "cǐwài", exCat: "A més a més, cal considerar els costos.", exCn: "此外，还需要考虑成本。"},
+                {cat: "En conseqüència", cn: "因此", pinyin: "yīncǐ", exCat: "En conseqüència, no podrem continuar.", exCn: "因此，我们无法继续。"},
+                {cat: "Tot i això", cn: "尽管如此", pinyin: "jǐnguǎn rúcǐ", exCat: "Tot i això, val la pena intentar-ho.", exCn: "尽管如此，还是值得一试。"},
+                {cat: "Amb la finalitat de", cn: "为了", pinyin: "wèile", exCat: "Ho fem amb la finalitat de millorar.", exCn: "我们这样做是为了改进。"},
+                {cat: "Sempre que", cn: "只要", pinyin: "zhǐyào", exCat: "Pots venir sempre que vulguis.", exCn: "只要你想，你可以来。"},
+                {cat: "A no ser que", cn: "除非", pinyin: "chúfēi", exCat: "No ho farem, a no ser que ens ho demanin.", exCn: "我们不会做，除非他们要求我们。"},
+                {cat: "Pel que sembla", cn: "看起来", pinyin: "kàn qǐlái", exCat: "Pel que sembla, aniran bé.", exCn: "看起来，会很顺利。"},
+                {cat: "D'una banda", cn: "一方面", pinyin: "yī fāngmiàn", exCat: "D'una banda, és car.", exCn: "一方面，很贵。"},
+                {cat: "Quant a", cn: "至于", pinyin: "zhìyú", exCat: "Quant a mi, estic d'acord.", exCn: "至于我，我同意。"},
+                {cat: "En primer lloc", cn: "首先", pinyin: "shǒuxiān", exCat: "En primer lloc, analitzem les dades.", exCn: "首先，让我们分析数据。"},
+                {cat: "En segon lloc", cn: "其次", pinyin: "qícì", exCat: "En segon lloc, cal revisar el pressupost.", exCn: "其次，需要审查预算。"},
+                {cat: "Finalment", cn: "最后", pinyin: "zuìhòu", exCat: "Finalment, prendrem una decisió.", exCn: "最后，我们做决定。"},
+                {cat: "Per tant", cn: "因此", pinyin: "yīncǐ", exCat: "Per tant, no podrem assistir.", exCn: "因此，我们无法参加。"},
+                {cat: "Atès que", cn: "鉴于", pinyin: "jiànyú", exCat: "Atès que plou, quedem a casa.", exCn: "鉴于下雨，我们待在家里。"},
+                {cat: "Ja que", cn: "既然", pinyin: "jìrán", exCat: "Ja que hi vas, compra pa.", exCn: "既然你去，买面包。"},
+                {cat: "Donat que", cn: "由于", pinyin: "yóuyú", exCat: "Donat que és tard, marxem.", exCn: "由于很晚了，我们走吧。"},
+                {cat: "Atès que", cn: "考虑到", pinyin: "kǎolǜ dào", exCat: "Atès que fa fred, porta abric.", exCn: "考虑到天冷，带外套。"},
+                {cat: "En vista que", cn: "鉴于", pinyin: "jiànyú", exCat: "En vista que no ve, comencem.", exCn: "鉴于他不来，我们开始吧。"},
+                {cat: "Amb tot", cn: "尽管如此", pinyin: "jǐnguǎn rúcǐ", exCat: "Amb tot, val la pena provar.", exCn: "尽管如此，值得一试。"},
+                {cat: "No obstant això", cn: "然而", pinyin: "rán'ér", exCat: "No obstant això, seguirem endavant.", exCn: "然而，我们会继续前进。"},
+                {cat: "En efecte", cn: "的确", pinyin: "díquè", exCat: "En efecte, tens raó.", exCn: "的确，你是对的。"},
+                {cat: "De fet", cn: "事实上", pinyin: "shìshí shàng", exCat: "De fet, és molt fàcil.", exCn: "事实上，很容易。"},
+                {cat: "En realitat", cn: "实际上", pinyin: "shíjì shàng", exCat: "En realitat, no és tan car.", exCn: "实际上，没那么贵。"},
+                {cat: "Al cap i a la fi", cn: "归根结底", pinyin: "guīgēn jiédǐ", exCat: "Al cap i a la fi, és la millor opció.", exCn: "归根结底，这是最好的选择。"}
+            ],
+            verbs: [
+                {cat: "Aconseguir", cn: "获得，达成", pinyin: "huòdé, dáchéng", exCat: "Hem aconseguit els objectius.", exCn: "我们达成了目标。"},
+                {cat: "Afrontar", cn: "面对", pinyin: "miànduì", exCat: "Afrontem els reptes amb coratge.", exCn: "我们勇敢面对挑战。"},
+                {cat: "Aprofundir", cn: "深化", pinyin: "shēnhuà", exCat: "Vull aprofundir en aquest tema.", exCn: "我想深化这个主题。"},
+                {cat: "Assolir", cn: "实现", pinyin: "shíxiàn", exCat: "Vam assolir l'acord.", exCn: "我们达成了协议。"},
+                {cat: "Augmentar", cn: "增加", pinyin: "zēngjiā", exCat: "Els preus augmenten cada any.", exCn: "价格每年都在上涨。"},
+                {cat: "Contribuir", cn: "贡献", pinyin: "gòngxiàn", exCat: "Tots contribuïm al projecte.", exCn: "我们都为项目做贡献。"},
+                {cat: "Desenvolupar", cn: "发展", pinyin: "fāzhǎn", exCat: "Desenvolupem noves tecnologies.", exCn: "我们发展新技术。"},
+                {cat: "Difondre", cn: "传播", pinyin: "chuánbō", exCat: "Difonen les notícies ràpidament.", exCn: "他们快速传播消息。"},
+                {cat: "Disminuir", cn: "减少", pinyin: "jiǎnshǎo", exCat: "La producció ha disminuït.", exCn: "生产减少了。"},
+                {cat: "Evidenciar", cn: "证明", pinyin: "zhèngmíng", exCat: "Els resultats evidencien la millora.", exCn: "结果证明了改善。"},
+                {cat: "Fomentar", cn: "促进", pinyin: "cùjìn", exCat: "Fomentem la innovació.", exCn: "我们促进创新。"},
+                {cat: "Implementar", cn: "实施", pinyin: "shíshī", exCat: "Implementarem el nou sistema.", exCn: "我们将实施新系统。"},
+                {cat: "Impulsar", cn: "推动", pinyin: "tuīdòng", exCat: "Impulsem el canvi.", exCn: "我们推动变革。"},
+                {cat: "Incrementar", cn: "增长", pinyin: "zēngzhǎng", exCat: "Els ingressos s'incrementen.", exCn: "收入增长。"},
+                {cat: "Millorar", cn: "改善", pinyin: "gǎishàn", exCat: "Hem millorat els processos.", exCn: "我们改善了流程。"},
+                {cat: "Percebre", cn: "察觉", pinyin: "chájué", exCat: "Percebo un canvi d'actitud.", exCn: "我察觉到态度的变化。"},
+                {cat: "Plantejar", cn: "提出", pinyin: "tíchū", exCat: "Plantegem una nova proposta.", exCn: "我们提出新建议。"},
+                {cat: "Promoure", cn: "推广", pinyin: "tuīguǎng", exCat: "Promovem la cultura.", exCn: "我们推广文化。"},
+                {cat: "Reduir", cn: "减少", pinyin: "jiǎnshǎo", exCat: "Reduïm les emissions.", exCn: "我们减少排放。"},
+                {cat: "Reflexionar", cn: "反思", pinyin: "fǎnsī", exCat: "Cal reflexionar sobre això.", exCn: "需要反思这个。"},
+                {cat: "Reforçar", cn: "加强", pinyin: "jiāqiáng", exCat: "Reforcem la seguretat.", exCn: "我们加强安全。"},
+                {cat: "Remarcar", cn: "强调", pinyin: "qiángdiào", exCat: "Vull remarcar aquest punt.", exCn: "我想强调这一点。"},
+                {cat: "Ressaltar", cn: "突出", pinyin: "tūchū", exCat: "Ressaltem els aspectes positius.", exCn: "我们突出积极方面。"},
+                {cat: "Suscitar", cn: "引起", pinyin: "yǐnqǐ", exCat: "Això suscita molts dubtes.", exCn: "这引起很多疑问。"},
+                {cat: "Verificar", cn: "验证", pinyin: "yànzhèng", exCat: "Hem de verificar les dades.", exCn: "我们需要验证数据。"},
+                {cat: "Vincular", cn: "关联", pinyin: "guānlián", exCat: "Vinculem els dos projectes.", exCn: "我们关联两个项目。"}
+            ]
+        };
+
+        const gradedReaders = [
+            {
+                title: "L'emprenedor innovador",
+                level: "B2",
+                titleCn: "创新企业家",
+                text: `En Joan sempre havia somiat amb crear la seva pròpia <span class="highlight" data-cn="企业" data-pinyin="qǐyè">empresa</span>. <span class="highlight" data-cn="尽管" data-pinyin="jǐnguǎn">Malgrat que</span> el <span class="highlight" data-cn="市场" data-pinyin="shìchǎng">mercat</span> era molt <span class="highlight" data-cn="竞争激烈的" data-pinyin="jìngzhēng jīliè de">competitiu</span>, va decidir <span class="highlight" data-cn="迈出这一步" data-pinyin="màichū zhè yībù">fer el salt</span>. 
+
+Va <span class="highlight" data-cn="投资" data-pinyin="tóuzī">invertir</span> tots els seus estalvis en una startup tecnològica que es dedicava a la <span class="highlight" data-cn="可持续性" data-pinyin="kě chíxù xìng">sostenibilitat</span>. La seva <span class="highlight" data-cn="战略" data-pinyin="zhànlüè">estratègia</span> era clara: <span class="highlight" data-cn="执行" data-pinyin="zhíxíng">dur a terme</span> projectes innovadors que resolguessin problemes ambientals.
+
+<span class="highlight" data-cn="因此" data-pinyin="yīncǐ">Així doncs</span>, després de molta <span class="highlight" data-cn="深入研究" data-pinyin="shēnrù yánjiū">recerca</span> i <span class="highlight" data-cn="规划" data-pinyin="guīhuà">planificació</span>, va <span class="highlight" data-cn="达成" data-pinyin="dáchéng">assolir</span> els seus objectius. Els <span class="highlight" data-cn="股东" data-pinyin="gǔdōng">accionistes</span> estaven contents amb la <span class="highlight" data-cn="盈利能力" data-pinyin="yínglì nénglì">rendibilitat</span> de l'empresa.`,
+                translation: "琼一直梦想创建自己的公司。尽管市场竞争激烈，他决定迈出这一步。他将所有积蓄投资于一家专注于可持续发展的科技初创公司。他的战略很明确：执行创新项目来解决环境问题。因此，经过大量深入研究和规划，他实现了目标。股东们对公司的盈利能力感到满意。"
+            },
+            {
+                title: "La investigació acadèmica",
+                level: "B2",
+                titleCn: "学术研究",
+                text: `La Marta estava <span class="highlight" data-cn="执行" data-pinyin="zhíxíng">duent a terme</span> una <span class="highlight" data-cn="研究" data-pinyin="yánjiū">investigació</span> important sobre el canvi climàtic. La seva <span class="highlight" data-cn="方法论" data-pinyin="fāngfǎlùn">metodologia</span> incloïa la recollida de <span class="highlight" data-cn="数据" data-pinyin="shùjù">dades</span> de diverses fonts.
+
+<span class="highlight" data-cn="关于" data-pinyin="guānyú">Pel que fa a</span> l'<span class="highlight" data-cn="分析" data-pinyin="fēnxī">anàlisi</span>, va utilitzar <span class="highlight" data-cn="统计" data-pinyin="tǒngjì">estadístiques</span> avançades per controlar totes les <span class="highlight" data-cn="变量" data-pinyin="biànliàng">variables</span>. L'<span class="highlight" data-cn="证据" data-pinyin="zhèngjù">evidència</span> trobada va ser contundent.
+
+La seva <span class="highlight" data-cn="假设" data-pinyin="jiǎshè">hipòtesi</span> inicial es va confirmar: el <span class="highlight" data-cn="范式" data-pinyin="fànshì">paradigma</span> actual havia de canviar. <span class="highlight" data-cn="另一方面" data-pinyin="lìng yī fāngmiàn">D'altra banda</span>, també va descobrir noves oportunitats per a futures investigacions.`,
+                translation: "玛尔塔正在进行一项关于气候变化的重要研究。她的方法论包括从多个来源收集数据。关于分析，她使用先进的统计方法来控制所有变量。发现的证据很有力。她最初的假设得到了证实：当前的范式必须改变。另一方面，她也发现了未来研究的新机会。"
+            },
+            {
+                title: "El canvi professional",
+                level: "B2",
+                titleCn: "职业转变",
+                text: `Després de molt <span class="highlight" data-cn="反思" data-pinyin="fǎnsī">reflexionar</span>, la Clara va decidir canviar de <span class="highlight" data-cn="职业" data-pinyin="zhíyè">professió</span>. <span class="highlight" data-cn="然而" data-pinyin="rán'ér">Tanmateix</span>, no va ser una decisió fàcil perquè <span class="highlight" data-cn="必须考虑" data-pinyin="bìxū kǎolǜ">calia tenir en compte</span> molts factors.
+
+Va <span class="highlight" data-cn="加把劲" data-pinyin="jiā bǎ jìn">posar-se les piles</span> i va començar a estudiar <span class="highlight" data-cn="分析" data-pinyin="fēnxī">anàlisi</span> de dades. <span class="highlight" data-cn="此外" data-pinyin="cǐwài">A més a més</span>, va fer cursos en línia per <span class="highlight" data-cn="深入研究" data-pinyin="shēnrù yánjiū">aprofundir</span> els seus coneixements.
+
+<span class="highlight" data-cn="尽管" data-pinyin="jǐnguǎn">Malgrat que</span> els primers mesos van ser difícils, va <span class="highlight" data-cn="继续前进" data-pinyin="jìxù qiánjìn">tirar endavant</span>. Ara treballa com a analista de dades i <span class="highlight" data-cn="珍视" data-pinyin="zhēnshì">valora</span> molt la seva decisió.`,
+                translation: "经过深思熟虑，克拉拉决定转行。然而，这并非易事，因为必须考虑许多因素。她加把劲开始学习数据分析。此外，她还参加在线课程深化知识。尽管最初几个月很困难，她仍继续前进。现在她作为数据分析师工作，非常珍视自己的决定。"
+            }
+        ];
+
+        let currentMode = 'flashcard';
+        let currentCategory = 'all';
+        let currentIndex = 0;
+        let currentDeck = [];
+        let isFlipped = false;
+        let knownWords = new Set();
+        let gameScore = 0;
+        let streakCount = 0;
+        let currentReaderIndex = 0;
+        let gameAnswered = false;
+        let currentGameQuestion = null;
+
+        function getAllWords() {
+            let allWords = [];
+            for (let category in vocabulary) {
+                allWords = allWords.concat(vocabulary[category]);
+            }
+            return allWords;
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (mode === 'reader') {
+                document.getElementById('categorySection').style.display = 'none';
+            } else {
+                document.getElementById('categorySection').style.display = 'block';
+            }
+            
+            renderContent();
+        }
+
+        function selectCategory(category) {
+            currentCategory = category;
+            currentIndex = 0;
+            
+            document.querySelectorAll('.category-btn').forEach(btn => btn.classList.remove('selected'));
+            event.target.classList.add('selected');
+            
+            if (category === 'all') {
+                currentDeck = getAllWords();
+            } else {
+                currentDeck = vocabulary[category];
+            }
+            
+            document.getElementById('totalWords').textContent = currentDeck.length;
+            renderContent();
+        }
+
+        function renderContent() {
+            const contentArea = document.getElementById('contentArea');
+            
+            if (currentMode === 'flashcard') {
+                renderFlashcard();
+            } else if (currentMode === 'reader') {
+                renderReader();
+            } else if (currentMode === 'game') {
+                renderGame();
+            }
+        }
+
+        function renderFlashcard() {
+            const contentArea = document.getElementById('contentArea');
+            const card = currentDeck[currentIndex];
+            
+            contentArea.innerHTML = `
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar"></div>
+                </div>
+                <div class="card-counter" id="cardCounter"></div>
+                
+                <div class="card" id="flashcard" onclick="flipCard()">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <div class="word-catalan">${card.cat}</div>
+                            <div style="opacity: 0.7; margin-top: 10px;">点击翻转 Clica per girar</div>
+                        </div>
+                        <div class="card-back">
+                            <div class="word-chinese">${card.cn}</div>
+                            <div class="pinyin">${card.pinyin}</div>
+                            <div class="example">
+                                <div>${card.exCat}</div>
+                                <div style="margin-top: 10px; opacity: 0.9;">${card.exCn}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="controls">
+                    <button class="control-btn btn-know" onclick="markKnown()">✓ 已掌握 Conegut</button>
+                    <button class="control-btn btn-learning" onclick="markLearning()">📝 学习中 Aprenent</button>
+                </div>
+
+                <div class="controls">
+                    <button class="control-btn btn-prev" onclick="prevCard()">⬅️ 上一个</button>
+                    <button class="control-btn btn-shuffle" onclick="shuffleCards()">🔀 随机</button>
+                    <button class="control-btn btn-next" onclick="nextCard()">下一个 ➡️</button>
+                </div>
+            `;
+            
+            updateProgress();
+        }
+
+        function renderReader() {
+            const contentArea = document.getElementById('contentArea');
+            const story = gradedReaders[currentReaderIndex];
+            
+            contentArea.innerHTML = `
+                <div class="reader-container">
+                    <div class="reader-title">${story.title}</div>
+                    <div class="reader-level">📚 ${story.titleCn} (${story.level})</div>
+                    <div class="reader-text">${story.text}</div>
+                    <div class="translation-box">
+                        <h4>📖 完整翻译 Traducció completa:</h4>
+                        <p style="line-height: 1.8; margin-top: 10px;">${story.translation}</p>
+                    </div>
+                    <div class="controls">
+                        <button class="control-btn btn-prev" onclick="prevReader()" ${currentReaderIndex === 0 ? 'disabled' : ''}>
+                            ⬅️ 上一篇 Anterior
+                        </button>
+                        <button class="control-btn btn-next" onclick="nextReader()" ${currentReaderIndex === gradedReaders.length - 1 ? 'disabled' : ''}>
+                            下一篇 Següent ➡️
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Add hover tooltips to highlighted words
+            document.querySelectorAll('.highlight').forEach(word => {
+                word.addEventListener('mouseenter', showTooltip);
+                word.addEventListener('mouseleave', hideTooltip);
+            });
+        }
+
+        function renderGame() {
+            if (!currentGameQuestion || gameAnswered) {
+                generateGameQuestion();
+            }
+            
+            const contentArea = document.getElementById('contentArea');
+            contentArea.innerHTML = `
+                <div class="game-container">
+                    <div class="game-score">🏆 分数 Puntuació: ${gameScore}</div>
+                    <div class="game-streak">🔥 连胜 Ratxa: ${streakCount}</div>
+                    <div class="game-question">${currentGameQuestion.question}</div>
+                    <div class="game-options" id="gameOptions">
+                        ${currentGameQuestion.options.map((opt, idx) => 
+                            `<div class="game-option" onclick="checkAnswer(${idx})">${opt}</div>`
+                        ).join('')}
+                    </div>
+                    <div class="controls">
+                        <button class="control-btn btn-next" onclick="nextQuestion()">下一题 Següent ➡️</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateGameQuestion() {
+            const allWords = getAllWords();
+            const correct = allWords[Math.floor(Math.random() * allWords.length)];
+            const questionType = Math.random() > 0.5 ? 'cat-to-cn' : 'cn-to-cat';
+            
+            let options = [correct];
+            while (options.length < 4) {
+                const random = allWords[Math.floor(Math.random() * allWords.length)];
+                if (!options.includes(random)) {
+                    options.push(random);
+                }
+            }
+            
+            options = options.sort(() => Math.random() - 0.5);
+            
+            currentGameQuestion = {
+                question: questionType === 'cat-to-cn' ? correct.cat : correct.cn,
+                correctAnswer: questionType === 'cat-to-cn' ? correct.cn : correct.cat,
+                correctIndex: options.findIndex(opt => opt === correct),
+                options: options.map(opt => questionType === 'cat-to-cn' ? opt.cn : opt.cat),
+                type: questionType
+            };
+            
+            gameAnswered = false;
+        }
+
+        function checkAnswer(index) {
+            if (gameAnswered) return;
+            
+            gameAnswered = true;
+            const options = document.querySelectorAll('.game-option');
+            
+            if (index === currentGameQuestion.correctIndex) {
+                options[index].classList.add('correct');
+                gameScore += 10;
+                streakCount++;
+                document.getElementById('gameScore').textContent = gameScore;
+                document.getElementById('streakCount').textContent = streakCount;
+            } else {
+                options[index].classList.add('wrong');
+                options[currentGameQuestion.correctIndex].classList.add('correct');
+                streakCount = 0;
+                document.getElementById('streakCount').textContent = streakCount;
+            }
+        }
+
+        function nextQuestion() {
+            generateGameQuestion();
+            renderGame();
+        }
+
+        function flipCard() {
+            const card = document.getElementById('flashcard');
+            card.classList.toggle('flipped');
+            isFlipped = !isFlipped;
+        }
+
+        function markKnown() {
+            knownWords.add(currentDeck[currentIndex].cat);
+            document.getElementById('knownWords').textContent = knownWords.size;
+            nextCard();
+        }
+
+        function markLearning() {
+            nextCard();
+        }
+
+        function nextCard() {
+            currentIndex = (currentIndex + 1) % currentDeck.length;
+            renderFlashcard();
+        }
+
+        function prevCard() {
+            currentIndex = (currentIndex - 1 + currentDeck.length) % currentDeck.length;
+            renderFlashcard();
+        }
+
+        function shuffleCards() {
+            for (let i = currentDeck.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [currentDeck[i], currentDeck[j]] = [currentDeck[j], currentDeck[i]];
+            }
+            currentIndex = 0;
+            renderFlashcard();
+        }
+
+        function updateProgress() {
+            const progress = ((currentIndex + 1) / currentDeck.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('cardCounter').textContent = `${currentIndex + 1} / ${currentDeck.length}`;
+        }
+
+        function nextReader() {
+            if (currentReaderIndex < gradedReaders.length - 1) {
+                currentReaderIndex++;
+                renderReader();
+            }
+        }
+
+        function prevReader() {
+            if (currentReaderIndex > 0) {
+                currentReaderIndex--;
+                renderReader();
+            }
+        }
+
+        function showTooltip(event) {
+            const tooltip = document.getElementById('tooltip');
+            const cn = event.target.dataset.cn;
+            const pinyin = event.target.dataset.pinyin;
+            
+            tooltip.innerHTML = `${cn}<br><em>${pinyin}</em>`;
+            tooltip.style.display = 'block';
+            tooltip.style.left = event.pageX + 10 + 'px';
+            tooltip.style.top = event.pageY + 10 + 'px';
+        }
+
+        function hideTooltip() {
+            document.getElementById('tooltip').style.display = 'none';
+        }
+
+        window.onload = function() {
+            currentDeck = getAllWords();
+            document.getElementById('totalWords').textContent = currentDeck.length;
+            renderContent();
+        };
+
+        document.addEventListener('keydown', function(event) {
+            if (currentMode === 'flashcard') {
+                if (event.key === 'ArrowRight') nextCard();
+                if (event.key === 'ArrowLeft') prevCard();
+                if (event.key === ' ') flipCard();
+            } else if (currentMode === 'reader') {
+                if (event.key === 'ArrowRight') nextReader();
+                if (event.key === 'ArrowLeft') prevReader();
+            }
+        });
+    </script>
+</body>
+</html>
